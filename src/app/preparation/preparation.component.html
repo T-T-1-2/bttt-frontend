@@ -1,0 +1,41 @@
+<div class="f-col">
+  <div class="group f-col m16">
+    <button mat-raised-button color="primary" *ngIf="!player" (click)="onHostClicked()">
+      {{ "preparation.host.button" | translate }}
+    </button>
+
+    <div *ngIf="gameCode" class="f-col">
+      <h1>
+        {{ gameCode }}
+
+        <button mat-icon-button (click)="onCopyGameCodeClicked()">
+          <mat-icon>content_copy</mat-icon>
+        </button>
+
+        <button mat-icon-button (click)="onCopyLinkClicked()">
+          <mat-icon>link_2</mat-icon>
+        </button>
+      </h1>
+
+      <p>
+        {{ "preparation.host.waiting" | translate }}
+      </p>
+    </div>
+  </div>
+
+  <div *ngIf="player !== 'host'" class="group f-col m16">
+    <form>
+      <mat-form-field>
+        <mat-label>{{ "preparation.guest.label" | translate }}</mat-label>
+        <input matInput
+              [placeholder]="'preparation.guest.placeholder' | translate"
+              [formControl]="gameCodeControl">
+        <mat-error>{{ getGameCodeError() | translate }}</mat-error>
+      </mat-form-field>
+    </form>
+
+    <button mat-raised-button color="primary" [disabled]="isJoinButtonDisabled()" (click)="onJoinClicked()">
+      {{ "preparation.guest.button" | translate }}
+    </button>
+  </div>
+</div>

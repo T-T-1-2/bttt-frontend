@@ -1,0 +1,12 @@
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cell {
+  overflow: hidden;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+}

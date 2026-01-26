@@ -1,0 +1,12 @@
+<div class="f-col">
+  <table>
+    <tr *ngFor="let row of cells">
+      <td *ngFor="let cell of row">
+        <div class="centered cell" matRipple [matRippleDisabled]="isBlocked(cell)" [style.background-color]="getBackgroundColor(cell)" (click)="onCellClicked(cell)">
+          <mat-icon *ngIf="cell.symbol === 'host'">close</mat-icon>
+          <mat-icon *ngIf="cell.symbol === 'guest'">circle</mat-icon>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>

@@ -1,0 +1,15 @@
+{
+  "title": "Boundless TTT",
+  "preparation": {
+    "host": {
+      "button": "Host",
+      "waiting": "Waiting for opponent to join..."
+    },
+    "guest": {
+      "label": "Game-Code",
+      "placeholder": "e.g. ABCD",
+      "error": "4 Letters",
+      "button": "Join"
+    }
+  }
+}
