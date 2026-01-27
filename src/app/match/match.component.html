@@ -12,7 +12,8 @@
 
   <div *ngIf="!bttt.winner" class="m16 f-row">
     <div class="centered turn-player" [style.background-color]="bttt.current === bttt.player ? '#208020' : '#404040'">
-      <mat-icon>close</mat-icon>
+      <mat-icon *ngIf="bttt.player === 'host'">close</mat-icon>
+      <mat-icon *ngIf="bttt.player === 'guest'">circle</mat-icon>
     </div>
 
     <div class="centered turn-text" [style.background-color]="'#404040'">
@@ -20,7 +21,8 @@
     </div>
 
     <div class="centered turn-opponent" [style.background-color]="bttt.current !== bttt.player ? '#802020' : '#404040'">
-      <mat-icon>circle</mat-icon>
+      <mat-icon *ngIf="bttt.player === 'host'">circle</mat-icon>
+      <mat-icon *ngIf="bttt.player === 'guest'">close</mat-icon>
     </div>
   </div>
 

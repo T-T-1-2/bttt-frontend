@@ -100,9 +100,4 @@ export class PreparationComponent {
       }
     }).then();
   }
-
-  private reset() {
-    this.player = undefined;
-    this.gameCode = undefined;
-  }
 }

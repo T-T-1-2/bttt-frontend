@@ -51,6 +51,7 @@ export class BtttService {
 
   start(player: PlayerSymbol) {
     this.player = player;
+    this.current = PlayerSymbol.host;
     this.winner = undefined;
     this.wins = 0;
     this.losses = 0;
@@ -81,6 +82,12 @@ export class BtttService {
       this.current = PlayerSymbol.guest;
     } else if (this.winner === PlayerSymbol.guest) {
       this.current = PlayerSymbol.host;
+    } else if (this.winner === PlayerSymbol.none) {
+      if (this.current === PlayerSymbol.host) {
+        this.current = PlayerSymbol.guest;
+      } else {
+        this.current = PlayerSymbol.host;
+      }
     } else {
       this.current = PlayerSymbol.host;
     }
