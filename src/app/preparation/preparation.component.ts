@@ -1,17 +1,17 @@
-import { Component, Output } from '@angular/core';
-import { Clipboard } from '@angular/cdk/clipboard';
-import { AbstractControl, FormControl, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { TranslateModule } from '@ngx-translate/core';
-import { NgIf } from '@angular/common';
+import { Component } from "@angular/core";
+import { Clipboard } from "@angular/cdk/clipboard";
+import { AbstractControl, FormControl, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { TranslateModule } from "@ngx-translate/core";
+import { NgIf } from "@angular/common";
 import { MatIcon } from "@angular/material/icon";
-import { StartGameResponse } from '../../core/http-service';
-import { Router } from '@angular/router';
+import { StartGameResponse } from "../../core/http-service";
+import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-preparation',
+  selector: "app-preparation",
   standalone: true,
   imports: [
     FormsModule,
@@ -23,8 +23,8 @@ import { Router } from '@angular/router';
     TranslateModule,
     MatIcon
 ],
-  templateUrl: './preparation.component.html',
-  styleUrl: './preparation.component.scss'
+  templateUrl: "./preparation.component.html",
+  styleUrl: "./preparation.component.scss"
 })
 export class PreparationComponent {
 
@@ -49,19 +49,11 @@ export class PreparationComponent {
   }
 
   getGameCodeError(): string {
-    if (this.gameCodeControl.hasError('invalidFormat')) {
+    if (this.gameCodeControl.hasError("invalidFormat")) {
       return "preparation.guest.error";
     } else {
-      return '';
+      return "";
     }
-  }
-
-  isHostButtonDisabled(): boolean {
-    return !!this.player;
-  }
-
-  isJoinInputDisabled(): boolean {
-    return !!this.player;
   }
 
   isJoinButtonDisabled(): boolean {

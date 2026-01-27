@@ -5,8 +5,41 @@
 }
 
 .cell {
-  overflow: hidden;
   width: 48px;
   height: 48px;
   border-radius: 8px;
+}
+
+.turn-player {
+  width: 48px;
+  height: 48px;
+  border-top-left-radius: 16px;
+  border-bottom-left-radius: 16px;
+  -moz-border-radius-topleft: 16px;
+  -moz-border-radius-bottomleft: 16px;
+}
+
+.turn-opponent {
+  width: 48px;
+  height: 48px;
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+  -moz-border-radius-topright: 16px;
+  -moz-border-radius-bottomright: 16px;
+}
+
+.turn-text {
+  height: 48px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.banner {
+  border-radius: 16px;
+  text-align: center;
+}
+
+.banner > p {
+  padding-left: 16px;
+  padding-right: 16px;
 }

@@ -11,5 +11,21 @@
       "error": "4 Letters",
       "button": "Join"
     }
+  },
+  "match": {
+    "turn": "Turn",
+    "labels": {
+      "win": "You win!",
+      "loss": "You lose...",
+      "tie": "Tie..."
+    },
+    "buttons": {
+      "rematchAfterWin": "Rematch",
+      "rematchAfterLoss": "Revenge",
+      "rematchAfterTie": "Settle it",
+      "quitAfterWin": "Quit",
+      "quitAfterLoss": "Rage Quit",
+      "quitAfterTie": "Eh, what ever"
+    }
   }
 }

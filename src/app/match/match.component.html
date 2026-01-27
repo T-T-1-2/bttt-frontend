@@ -1,12 +1,72 @@
-<div class="f-col">
+<div class="m16 f-col">
   <table>
-    <tr *ngFor="let row of cells">
+    <tr *ngFor="let row of bttt.cells">
       <td *ngFor="let cell of row">
-        <div class="centered cell" matRipple [matRippleDisabled]="isBlocked(cell)" [style.background-color]="getBackgroundColor(cell)" (click)="onCellClicked(cell)">
+        <div class="centered cell" matRipple [matRippleDisabled]="bttt.isBlocked(cell)" [style.background-color]="getBackgroundColor(cell)" (click)="onCellClicked(cell)">
           <mat-icon *ngIf="cell.symbol === 'host'">close</mat-icon>
           <mat-icon *ngIf="cell.symbol === 'guest'">circle</mat-icon>
         </div>
       </td>
     </tr>
   </table>
+
+  <div *ngIf="!bttt.winner" class="m16 f-row">
+    <div class="centered turn-player" [style.background-color]="bttt.current === bttt.player ? '#208020' : '#404040'">
+      <mat-icon>close</mat-icon>
+    </div>
+
+    <div class="centered turn-text" [style.background-color]="'#404040'">
+      {{ "match.turn" | translate }}
+    </div>
+
+    <div class="centered turn-opponent" [style.background-color]="bttt.current !== bttt.player ? '#802020' : '#404040'">
+      <mat-icon>circle</mat-icon>
+    </div>
+  </div>
+
+  <div *ngIf="bttt.winner" class="m8 f-col">
+    <div *ngIf="bttt.hasPlayerWon()" class="banner" [style.background-color]="'#208020'">
+      <p>
+        {{ "match.labels.win" | translate }}
+      </p>
+    </div>
+
+    <div *ngIf="bttt.hasPlayerLost()" class="banner" [style.background-color]="'#802020'">
+      <p>
+        {{ "match.labels.loss" | translate }}
+      </p>
+    </div>
+
+    <div *ngIf="bttt.hasPlayerTied()" class="banner" [style.background-color]="'#808020'">
+      <p>
+        {{ "match.labels.tie" | translate }}
+      </p>
+    </div>
+
+    <div class="m16 f-col">
+      <svg width="100" height="100" viewBox="0 0 100 100">
+        <path [attr.d]="getWinsArc()" fill="#208020" stroke="#303030" stroke-width="4"/>
+        <path [attr.d]="getLossesArc()" fill="#802020" stroke="#303030" stroke-width="4"/>
+        <path [attr.d]="getTiesArc()" fill="#808020" stroke="#303030" stroke-width="4"/>
+      </svg>
+
+      <div class="m8 f-row">
+        {{ bttt.wins }}
+        |
+        {{ bttt.losses }}
+        |
+        {{ bttt.ties }}
+      </div>
+    </div>
+
+    <div class="f-row">
+      <button mat-raised-button class="m8" (click)="onQuitClicked()">
+        {{ getQuitText() | translate }}
+      </button>
+
+      <button mat-raised-button class="m8" color="primary" (click)="onRematchClicked()">
+        {{ getRematchText() | translate }}
+      </button>
+    </div>
+  </div>
 </div>

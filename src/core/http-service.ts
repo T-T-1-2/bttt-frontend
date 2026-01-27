@@ -7,7 +7,7 @@ export interface StartGameResponse {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class HttpService {
 
