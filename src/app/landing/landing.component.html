@@ -1,0 +1,21 @@
+<div class="centered f-col">
+  <h1>{{ "landing.title" | translate }}</h1>
+
+  <p style="max-width: 90%; text-align: center;">
+    {{ "landing.text" | translate }}
+  </p>
+
+  <table>
+    <tr *ngFor="let row of cells">
+      <td *ngFor="let cell of row">
+        <div class="centered cell" [style.background-color]="getBackgroundColor(cell)">
+          <mat-icon *ngIf="cell.symbol">{{ cell.symbol }}</mat-icon>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <button mat-raised-button class="m8" color="primary" (click)="onStartClicked()">
+    {{ "landing.start" | translate}}
+  </button>
+</div>

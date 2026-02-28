@@ -1,19 +1,25 @@
 <div class="f-col">
-  <div class="group f-col m16">
-    <button mat-raised-button color="primary" *ngIf="!player" (click)="onHostClicked()">
+  <div class="group f-col m16" [style.background-color]="getBackgroundColor()">
+    <button mat-raised-button color="primary" [disabled]="isHostButtonDisabled()" (click)="onHostClicked()">
       {{ "preparation.host.button" | translate }}
     </button>
 
     <div *ngIf="gameCode" class="f-col">
+      <p>
+        {{ "preparation.host.share" | translate }}
+      </p>
+
       <h1>
         {{ gameCode }}
 
         <button mat-icon-button (click)="onCopyGameCodeClicked()">
-          <mat-icon>content_copy</mat-icon>
+          <mat-icon *ngIf="!copiedGameCode">content_copy</mat-icon>
+          <mat-icon *ngIf="copiedGameCode" color="accent">check</mat-icon>
         </button>
 
         <button mat-icon-button (click)="onCopyLinkClicked()">
-          <mat-icon>link_2</mat-icon>
+          <mat-icon *ngIf="!copiedLink">link_2</mat-icon>
+          <mat-icon *ngIf="copiedLink" color="accent">check</mat-icon>
         </button>
       </h1>
 
@@ -23,7 +29,7 @@
     </div>
   </div>
 
-  <div *ngIf="player !== 'host'" class="group f-col m16">
+  <div *ngIf="player !== 'host'" class="group f-col m16" [style.background-color]="getBackgroundColor()">
     <form>
       <mat-form-field>
         <mat-label>{{ "preparation.guest.label" | translate }}</mat-label>

@@ -1,12 +1,17 @@
-import { NgFor, NgIf } from "@angular/common";
-import { Component } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { NgFor, NgIf, Location } from "@angular/common";
+import { Component, HostListener } from "@angular/core";
+import { Router } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { MatIconModule } from "@angular/material/icon";
 import { MatRipple, MatRippleModule } from "@angular/material/core";
 import { TranslateModule } from "@ngx-translate/core";
 import { MatButton, MatButtonModule } from "@angular/material/button";
 import { BtttService, BtttCell, PlayerSymbol } from "../../core/bttt-service";
+import { SocketService } from "../../core/socket-service";
+import { first } from "rxjs";
+import { MatDialog } from "@angular/material/dialog";
+import { InfoDialogComponent } from "../info-dialog/info-dialog.component";
+import { PersistenceService } from "../../core/persistence.service";
 
 @Component({
   selector: "app-match",
@@ -27,52 +32,75 @@ import { BtttService, BtttCell, PlayerSymbol } from "../../core/bttt-service";
 })
 export class MatchComponent {
 
-  constructor(private router: Router,
-              activatedRoute: ActivatedRoute,
-              public bttt: BtttService) {
-    activatedRoute.queryParams.subscribe(params => {
-      if (params["code"] && params["player"]) {
-        this.connect(params["code"], params["player"]);
-      } else { // TODO!
-        console.log("whoopsie daisy");
+  connected = false;
 
-        // dialog.open(InfoDialogComponent, {
-        //   data: {
-        //     title: "match.info.disconnected.title",
-        //     description: "match.info.disconnected.description",
-        //   }
-        // });
-      }
-    });
+  constructor(private router: Router,
+              private lcoation: Location,
+              public socketService: SocketService,
+              public btttService: BtttService,
+              public persistenceService: PersistenceService,
+              private dialog: MatDialog) {
+    if (socketService.player) {
+      this.btttService.start(socketService.player);
+      this.socketService.receivedTurn
+      .subscribe(move => {
+          if (move.player === btttService.current) {
+            btttService.update(move.x, move.y, move.player);
+          }
+        });
+      this.socketService.receivedRematch
+        .subscribe(() => this.btttService.reset())
+      this.socketService.receivedQuit
+        .pipe(first())
+        .subscribe(initiator => this.showErrorAndReturn(initiator));
+      this.socketService.onError
+        .pipe(first())
+        .subscribe(() => this.showErrorAndReturn("error"));
+    } else {
+    this.router.navigate(["/"], { replaceUrl: true }).then();
+    }
   }
 
-  private connect(code: string, player: "host" | "guest") {
-    this.bttt.start(player === "host" ? PlayerSymbol.host : PlayerSymbol.guest);
-    // TODO!
+  @HostListener("window:beforeunload")
+  canUnload(): boolean {
+    return !!this.btttService.winner;
+  }
+
+  private showErrorAndReturn(initiator: string) {
+    this.dialog.open(InfoDialogComponent, {
+      data: {
+        title: `match.quit.${initiator}.title`,
+        description: `match.quit.${initiator}.description`,
+      }
+    });
+    this.router.navigate(["/preparation"], { replaceUrl: true }).then();
   }
 
   getBackgroundColor(cell: BtttCell): string {
     if (cell.winning) {
-      if (cell.symbol === this.bttt.player) {
-        return "#208020";
+      if (cell.symbol === this.btttService.player) {
+        return this.persistenceService.getOwnColor();
       } else {
-        return "#802020";
+        return this.persistenceService.getOpponentColor();
       }
     } else if (cell.symbol === PlayerSymbol.none && !cell.blocked) {
-      return "#606060";
+      return this.persistenceService.getSoftHighlightColor();
     } else {
-      return "#404040";
+      return this.persistenceService.getHarshHighlightColor();
     }
   }
 
   onCellClicked(cell: BtttCell) {
-    this.bttt.update(cell);
+    if (this.socketService.player === this.btttService.current) {
+      this.btttService.update(cell.x, cell.y, this.socketService.player);
+      this.socketService.sendTurn(cell.x, cell.y);
+    }
   }
 
   getQuitText(): string {
-    if (this.bttt.winner === this.bttt.player) {
+    if (this.btttService.winner === this.btttService.player) {
       return "match.buttons.quitAfterWin";
-    } else if (this.bttt.winner !== PlayerSymbol.none) {
+    } else if (this.btttService.winner !== PlayerSymbol.none) {
       return "match.buttons.quitAfterLoss";
     } else {
       return "match.buttons.quitAfterTie";
@@ -80,9 +108,9 @@ export class MatchComponent {
   }
 
   getRematchText(): string {
-    if (this.bttt.winner === this.bttt.player) {
+    if (this.btttService.winner === this.btttService.player) {
       return "match.buttons.rematchAfterWin";
-    } else if (this.bttt.winner !== PlayerSymbol.none) {
+    } else if (this.btttService.winner !== PlayerSymbol.none) {
       return "match.buttons.rematchAfterLoss";
     } else {
       return "match.buttons.rematchAfterTie";
@@ -90,21 +118,21 @@ export class MatchComponent {
   }
 
   getWinsArc(): string {
-    const total = this.bttt.wins + this.bttt.losses + this.bttt.ties;
-    const to = this.bttt.wins / total;
+    const total = this.btttService.wins + this.btttService.losses + this.btttService.ties;
+    const to = this.btttService.wins / total;
     return this.getArc(0.0, to);
   }
 
   getLossesArc(): string {
-    const total = this.bttt.wins + this.bttt.losses + this.bttt.ties;
-    const from = this.bttt.wins / total;
-    const to = (this.bttt.wins + this.bttt.losses) / total;
+    const total = this.btttService.wins + this.btttService.losses + this.btttService.ties;
+    const from = this.btttService.wins / total;
+    const to = (this.btttService.wins + this.btttService.losses) / total;
     return this.getArc(from, to);
   }
 
   getTiesArc(): string {
-    const total = this.bttt.wins + this.bttt.losses + this.bttt.ties;
-    const from = (this.bttt.wins + this.bttt.losses) / total;
+    const total = this.btttService.wins + this.btttService.losses + this.btttService.ties;
+    const from = (this.btttService.wins + this.btttService.losses) / total;
     return this.getArc(from, 1.0);
   }
 
@@ -121,11 +149,17 @@ export class MatchComponent {
     return `M 50 50 L ${x1} ${y1} A 50 50 0 0 1 ${x2} ${y2} A 50 50 0 0 1 ${x3} ${y3} L 50 50`;
   }
 
+  getPieStroke() {
+    return this.persistenceService.darkMode ? "#303030" : "#FAFAFA";
+  }
+
   onQuitClicked() {
-    this.router.navigate(["/"]).then();
+    this.socketService.sendQuit();
+    this.router.navigate(["/preparation"], { replaceUrl: true }).then();
   }
 
   onRematchClicked() {
-    this.bttt.reset();
+    this.socketService.sendRematch();
+    this.btttService.reset();
   }
 }

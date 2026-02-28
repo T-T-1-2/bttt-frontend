@@ -1,8 +1,22 @@
 {
   "title": "Boundless TTT",
+  "common": {
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "no": "No",
+    "yes": "Yes",
+    "apply": "Apply"
+  },
+  "landing": {
+    "title": "Imagine, if you will...",
+    "text": "Tic Tac Toe, but Player 2 gets to decidce where Player 1's first move ends up inside the actual 3x3 Board. Thats it, pretty much.",
+    "start": "Let's go!"
+  },
   "preparation": {
     "host": {
       "button": "Host",
+      "share": "Share this Game-Code or Link with your opponent:",
       "waiting": "Waiting for opponent to join..."
     },
     "guest": {
@@ -10,9 +24,24 @@
       "placeholder": "e.g. ABCD",
       "error": "4 Letters",
       "button": "Join"
+    },
+    "error": {
+      "connection": {
+        "title": "Connection Error!",
+        "description": "Could not connect to Server. Please try again later."
+      },
+      "overloaded": {
+        "title": "O V E R L O A D E D",
+        "description": "The Server seems to be overloaded at the time. Please try again later."
+      },
+      "code": {
+        "title": "Invalid Game-Code",
+        "description": "Could not find a pending Game with that Game-Code."
+      }
     }
   },
   "match": {
+    "waiting": "Waiting for game to start...",
     "turn": "Turn",
     "labels": {
       "win": "You win!",
@@ -26,6 +55,37 @@
       "quitAfterWin": "Quit",
       "quitAfterLoss": "Rage Quit",
       "quitAfterTie": "Eh, what ever"
+    },
+    "quit": {
+      "server": {
+        "title": "Opponent lost connection!",
+        "description": "Your opponent has lost connection to the Server. Looks like you won?"
+      },
+      "client": {
+        "title": "Opponent quit!",
+        "description": "Your opponent quit the Game. Time to grill them about it! >:D"
+      },
+      "error": {
+        "title": "Whoopsie daisy ( ° ʖ °)",
+        "description": "Looks like something went wrong. Please try again later."
+      }
     }
+  },
+  "settings": {
+    "header": "Settings",
+    "theme": "Dark Mode",
+    "language": "Language",
+    "colors": "Colors",
+    "ownColor": "Your Color",
+    "opponentColor": "Opponent Color",
+    "neutralColor": "Neutral Color",
+    "symbols": "Symbols",
+    "symbolInfoLeft": "You can pick (most) Symbols from",
+    "reference": "this Page",
+    "symbolInfoRight": "",
+    "ownSymbol": "Your Symbol",
+    "opponentSymbol": "Opponent Symbol",
+    "dataInfo": "Saving of User Data",
+    "dataInfoText": "The settings are only saved in your Browser. The Server only manages the connection with your opponent while the Game is running and saves no information at all."
   }
 }

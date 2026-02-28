@@ -1,0 +1,121 @@
+<h2 mat-dialog-title>{{ "settings.header" | translate }}</h2>
+<mat-dialog-content>
+  <div class="f-row">
+    {{ "settings.theme" | translate }}
+    <span class="spacer"></span>
+    <mat-slide-toggle #darkModeSwitch labelPosition="before" [checked]="persistenceService.darkMode" (toggleChange)="onSetDarkModeChanged()"></mat-slide-toggle>
+  </div>
+
+  <div class="f-col" style="margin-top: 8px;">
+    <mat-form-field>
+      <mat-label>
+        <mat-icon>translate</mat-icon>
+        {{ "settings.language" | translate }}
+      </mat-label>
+      <mat-select [value]="currentLanguage.key" (valueChange)="onLanguageChanged($event)">
+        <mat-select-trigger>
+          <div class="f-row">
+            <img class="option-icon" [src]="currentLanguage.flag" [alt]="currentLanguage.key">
+            <span>{{ currentLanguage.name }}</span>
+          </div>
+        </mat-select-trigger>
+        <mat-option *ngFor="let language of languages" [value]="language.key">
+          <div class="f-row">
+            <img class="option-icon" [src]="language.flag" [alt]="language">
+            <span>{{ language.name }}</span>
+          </div>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <p><b>{{ "settings.colors" | translate }}</b></p>
+  <span>{{ "settings.ownColor" | translate }}</span>
+  <div class="f-row" style="height: 48px;">
+    <div class="panel" matRipple *ngFor="let index of [0, 1, 2, 3, 4, 5]"
+          [style.background-color]="getColor(index)" [class.panel-selected]="index === persistenceService.ownColorIndex"
+          (click)="onOwnColorClicked(index)">
+    </div>
+
+    <span class="spacer"></span>
+    <button mat-icon-button *ngIf="!isOwnColorDefault()" (click)="onOwnColorResetClicked()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+
+  <span>{{ "settings.opponentColor" | translate }}</span>
+  <div class="f-row" style="height: 48px;">
+    <div class="panel" matRipple *ngFor="let index of [0, 1, 2, 3, 4, 5]"
+          [style.background-color]="getColor(index)" [class.panel-selected]="index === persistenceService.opponentColorIndex"
+          (click)="onOpponentColorClicked(index)">
+    </div>
+
+    <span class="spacer"></span>
+    <button mat-icon-button *ngIf="!isOpponentColorDefault()" (click)="onOpponentColorResetClicked()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+
+  <span>{{ "settings.neutralColor" | translate }}</span>
+  <div class="f-row" style="height: 48px;">
+    <div class="panel" matRipple *ngFor="let index of [0, 1, 2, 3, 4, 5]"
+          [style.background-color]="getColor(index)" [class.panel-selected]="index === persistenceService.neutralColorIndex"
+          (click)="onNeutralColorClicked(index)">
+    </div>
+
+    <span class="spacer"></span>
+    <button mat-icon-button *ngIf="!isNeutralColorDefault()" (click)="onNeutralColorResetClicked()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+
+  <p><b>{{ "settings.symbols" | translate }}</b></p>
+  <p>
+    {{ "settings.symbolInfoLeft" | translate }}
+    <a href="https://fonts.google.com/icons">{{ "settings.reference" | translate }}</a>
+    {{ "settings.symbolInfoRight" | translate }}
+  </p>
+
+  <div class="f-row" style="align-items: start;">
+    <div class="centered cell" [style.background-color]="persistenceService.getSoftHighlightColor()">
+      <mat-icon>{{ persistenceService.ownSymbol }}</mat-icon>
+    </div>
+
+    <form>
+      <mat-form-field>
+        <mat-label>{{ "settings.ownSymbol" | translate }}</mat-label>
+        <input matInput placeholder="close" [formControl]="ownSymbolControl" (blur)="onOwnSymbolCnanged()">
+      </mat-form-field>
+    </form>
+
+    <span class="spacer"></span>
+    <button mat-icon-button *ngIf="!isOwnSymbolDefault()" (click)="onOwnSymbolResetClicked()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+
+  <div class="f-row" style="align-items: start;">
+    <div class="centered cell" [style.background-color]="persistenceService.getSoftHighlightColor()">
+      <mat-icon>{{ persistenceService.opponentSymbol }}</mat-icon>
+    </div>
+
+    <form>
+      <mat-form-field>
+        <mat-label>{{ "settings.opponentSymbol" | translate }}</mat-label>
+        <input matInput placeholder="circle" [formControl]="opponentSymbolControl" (blur)="onOpponentSymbolCnanged()">
+      </mat-form-field>
+    </form>
+
+    <span class="spacer"></span>
+    <button mat-icon-button *ngIf="!isOpponentSymbolDefault()" (click)="onOpponentSymbolResetClicked()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+
+  <p><b>{{ "settings.dataInfo" | translate }}</b></p>
+  <span>{{ "settings.dataInfoText" | translate }}</span>
+</mat-dialog-content>
+<mat-dialog-actions [align]="'end'">
+  <button mat-raised-button color="accent" *ngIf="isRefreshRequired()" cdkFocusInitial (click)="onApplyClick()">{{ "common.apply" | translate }}</button>
+  <button mat-raised-button color="primary" mat-dialog-close cdkFocusInitial>{{ "common.close" | translate }}</button>
+</mat-dialog-actions>

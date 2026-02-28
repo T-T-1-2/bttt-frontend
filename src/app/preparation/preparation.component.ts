@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef } from "@angular/core";
 import { Clipboard } from "@angular/cdk/clipboard";
 import { AbstractControl, FormControl, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
@@ -7,8 +7,13 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { TranslateModule } from "@ngx-translate/core";
 import { NgIf } from "@angular/common";
 import { MatIcon } from "@angular/material/icon";
-import { StartGameResponse } from "../../core/http-service";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
+import { SocketService } from "../../core/socket-service";
+import { first } from "rxjs";
+import { environment } from "./../../environments/environment";
+import { InfoDialogComponent } from "../info-dialog/info-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
+import { PersistenceService } from "../../core/persistence.service";
 
 @Component({
   selector: "app-preparation",
@@ -28,13 +33,31 @@ import { Router } from "@angular/router";
 })
 export class PreparationComponent {
 
+  private readonly copiedIcon = "check";
+
   player: "host" | "guest" | undefined;
   gameCode: string | undefined;
   gameCodeControl: FormControl<string | null>;
+  isFromInviteLink = false;
 
-  constructor(private router: Router, private clipboard: Clipboard) {
+  copiedGameCode = false;
+  copiedLink = false;
+
+  constructor(private router: Router,
+              activatedRoute: ActivatedRoute,
+              public persistenceService: PersistenceService,
+              private socketService: SocketService,
+              private clipboard: Clipboard,
+              private dialog: MatDialog) {
     this.gameCodeControl = new FormControl("", {
       validators: [Validators.required, this.getCodeValidator()],
+    });
+
+    activatedRoute.queryParams.subscribe(params => {
+      if (params["code"]) {
+        this.gameCodeControl.setValue(params["code"]);
+        this.isFromInviteLink = true;
+      }
     });
   }
 
@@ -56,6 +79,27 @@ export class PreparationComponent {
     }
   }
 
+  private showErrorAndReset(type: string) {
+    this.player = undefined;
+    this.gameCode = undefined;
+    this.gameCodeControl.enable();
+
+    this.dialog.open(InfoDialogComponent, {
+      data: {
+        title: `preparation.error.${type}.title`,
+        description: `preparation.error.${type}.description`,
+      }
+    });
+  }
+
+  getBackgroundColor() {
+    return this.persistenceService.darkMode ? this.persistenceService.getHarshHighlightColor() : this.persistenceService.getSoftHighlightColor();
+  }
+
+  isHostButtonDisabled(): boolean {
+    return !!this.player || this.isFromInviteLink;
+  }
+
   isJoinButtonDisabled(): boolean {
     return !!this.player || this.gameCodeControl.invalid;
   }
@@ -64,40 +108,55 @@ export class PreparationComponent {
     this.player = "host";
     this.gameCodeControl.disable();
 
-    // TODO! try host & wait for opponent
-    const response: StartGameResponse = {
-        code: "ASDF",
-      };
-
-    this.gameCode = response.code;
-
-    setTimeout(() => this.router.navigate(["/match"], {
-      queryParams: {
-        code: this.gameCode,
-        player: this.player
-      }
-    }).then(), 1000);
+    this.socketService.receivedConnected
+      .pipe(first())
+      .subscribe(connected => {
+        if (connected.success) {
+          this.gameCode = connected.code;
+        } else {
+          this.showErrorAndReset("overloaded");
+          this.socketService.disconnect();
+        }
+    });
+    this.socketService.receivedStarted
+      .pipe(first())
+      .subscribe(() => this.router.navigate(["/match"], { replaceUrl: true }));
+    this.socketService.onError
+      .pipe(first())
+      .subscribe(() => this.showErrorAndReset("connection"));
+    this.socketService.connectHost();
   }
 
   onCopyGameCodeClicked() {
     this.clipboard.copy(this.gameCode!);
+    this.copiedGameCode = true;
+    setTimeout(() => this.copiedGameCode = false, 1500);
   }
 
-  onCopyLinkClicked() { // TODO! get full url
-    this.clipboard.copy(`localhost:4200/match?code=${this.gameCode!}&player=guest`);
+  onCopyLinkClicked() {
+    this.clipboard.copy(`${environment.webUrl}/preparation?code=${this.gameCode!}`);
+    this.copiedLink = true;
+    setTimeout(() => this.copiedLink = false, 1500);
   }
 
   onJoinClicked() {
     this.player = "guest";
     this.gameCodeControl.disable();
 
-    // TODO! try join & nav
-
-    this.router.navigate(["/match"], {
-      queryParams: {
-        code: this.gameCodeControl.value,
-        player: this.player
-      }
-    }).then();
+    this.socketService.receivedConnected
+      .pipe(first())
+      .subscribe(connected => {
+        if (!connected.success) {
+          this.showErrorAndReset("code");
+          this.socketService.disconnect();
+        }
+    });
+    this.socketService.receivedStarted
+      .pipe(first())
+      .subscribe(() => this.router.navigate(["/match"], { replaceUrl: true }));
+    this.socketService.onError
+      .pipe(first())
+      .subscribe(() => this.showErrorAndReset("connection"));
+    this.socketService.connectGuest(this.gameCodeControl.value!);
   }
 }

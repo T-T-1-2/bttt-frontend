@@ -21,21 +21,19 @@ $bttt-dark-theme: mat.define-dark-theme(
     )
 );
 
-$bttt-light-primary: mat.define-palette(mat.$purple-palette);
+$bttt-light-primary: mat.define-palette(mat.$orange-palette);
 $bttt-light-accent: mat.define-palette(
     mat.$green-palette,
     A200,
     A100,
     A400
 );
-$bttt-light-warn: mat.define-palette(mat.$deep-orange-palette);
 
 $bttt-light-theme: mat.define-light-theme(
     (
       color: (
         primary: $bttt-light-primary,
-        accent: $bttt-light-accent,
-        warn: $bttt-light-warn
+        accent: $bttt-light-accent
       ),
     )
 );
@@ -54,6 +52,14 @@ $bttt-light-theme: mat.define-light-theme(
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+a {
+  color: var(--mat-sys-on-surface);
+}
+
+.spacer {
+  flex: 1 1 auto;
 }
 
 .m8 {
@@ -81,5 +87,11 @@ body {
 .f-row {
   display: flex;
   flex-direction: row;
+  align-items: center;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
   align-items: center;
 }

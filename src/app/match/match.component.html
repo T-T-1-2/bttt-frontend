@@ -1,45 +1,45 @@
 <div class="m16 f-col">
   <table>
-    <tr *ngFor="let row of bttt.cells">
+    <tr *ngFor="let row of btttService.cells">
       <td *ngFor="let cell of row">
-        <div class="centered cell" matRipple [matRippleDisabled]="bttt.isBlocked(cell)" [style.background-color]="getBackgroundColor(cell)" (click)="onCellClicked(cell)">
-          <mat-icon *ngIf="cell.symbol === 'host'">close</mat-icon>
-          <mat-icon *ngIf="cell.symbol === 'guest'">circle</mat-icon>
+        <div class="centered cell" matRipple [matRippleDisabled]="btttService.isBlocked(cell)" [style.background-color]="getBackgroundColor(cell)" (click)="onCellClicked(cell)">
+          <mat-icon *ngIf="cell.symbol === 'host'">{{ persistenceService.ownSymbol }}</mat-icon>
+          <mat-icon *ngIf="cell.symbol === 'guest'">{{ persistenceService.opponentSymbol }}</mat-icon>
         </div>
       </td>
     </tr>
   </table>
 
-  <div *ngIf="!bttt.winner" class="m16 f-row">
-    <div class="centered turn-player" [style.background-color]="bttt.current === bttt.player ? '#208020' : '#404040'">
-      <mat-icon *ngIf="bttt.player === 'host'">close</mat-icon>
-      <mat-icon *ngIf="bttt.player === 'guest'">circle</mat-icon>
+  <div *ngIf="!btttService.winner" class="m16 f-row">
+    <div class="centered turn-player" [style.background-color]="btttService.current === btttService.player ? persistenceService.getOwnColor() : persistenceService.getSoftHighlightColor()">
+      <mat-icon *ngIf="btttService.player === 'host'">{{ persistenceService.ownSymbol }}</mat-icon>
+      <mat-icon *ngIf="btttService.player === 'guest'">{{ persistenceService.opponentSymbol }}</mat-icon>
     </div>
 
-    <div class="centered turn-text" [style.background-color]="'#404040'">
+    <div class="centered turn-text" [style.background-color]="persistenceService.getSoftHighlightColor()">
       {{ "match.turn" | translate }}
     </div>
 
-    <div class="centered turn-opponent" [style.background-color]="bttt.current !== bttt.player ? '#802020' : '#404040'">
-      <mat-icon *ngIf="bttt.player === 'host'">circle</mat-icon>
-      <mat-icon *ngIf="bttt.player === 'guest'">close</mat-icon>
+    <div class="centered turn-opponent" [style.background-color]="btttService.current !== btttService.player ? persistenceService.getOpponentColor() : persistenceService.getSoftHighlightColor()">
+      <mat-icon *ngIf="btttService.player === 'host'">{{ persistenceService.opponentSymbol }}</mat-icon>
+      <mat-icon *ngIf="btttService.player === 'guest'">{{ persistenceService.ownSymbol }}</mat-icon>
     </div>
   </div>
 
-  <div *ngIf="bttt.winner" class="m8 f-col">
-    <div *ngIf="bttt.hasPlayerWon()" class="banner" [style.background-color]="'#208020'">
+  <div *ngIf="btttService.winner" class="m8 f-col">
+    <div *ngIf="btttService.hasPlayerWon()" class="banner" [style.background-color]="persistenceService.getOwnColor()">
       <p>
         {{ "match.labels.win" | translate }}
       </p>
     </div>
 
-    <div *ngIf="bttt.hasPlayerLost()" class="banner" [style.background-color]="'#802020'">
+    <div *ngIf="btttService.hasPlayerLost()" class="banner" [style.background-color]="persistenceService.getOpponentColor()">
       <p>
         {{ "match.labels.loss" | translate }}
       </p>
     </div>
 
-    <div *ngIf="bttt.hasPlayerTied()" class="banner" [style.background-color]="'#808020'">
+    <div *ngIf="btttService.hasPlayerTied()" class="banner" [style.background-color]="persistenceService.getNeutralColor()">
       <p>
         {{ "match.labels.tie" | translate }}
       </p>
@@ -47,17 +47,17 @@
 
     <div class="m16 f-col">
       <svg width="100" height="100" viewBox="0 0 100 100">
-        <path [attr.d]="getWinsArc()" fill="#208020" stroke="#303030" stroke-width="4"/>
-        <path [attr.d]="getLossesArc()" fill="#802020" stroke="#303030" stroke-width="4"/>
-        <path [attr.d]="getTiesArc()" fill="#808020" stroke="#303030" stroke-width="4"/>
+        <path [attr.d]="getWinsArc()" [attr.fill]="persistenceService.getOwnColor()" [attr.stroke]="getPieStroke()" stroke-width="4"/>
+        <path [attr.d]="getLossesArc()" [attr.fill]="persistenceService.getOpponentColor()" [attr.stroke]="getPieStroke()" stroke-width="4"/>
+        <path [attr.d]="getTiesArc()" [attr.fill]="persistenceService.getNeutralColor()" [attr.stroke]="getPieStroke()" stroke-width="4"/>
       </svg>
 
       <div class="m8 f-row">
-        {{ bttt.wins }}
+        {{ btttService.wins }}
         |
-        {{ bttt.losses }}
+        {{ btttService.losses }}
         |
-        {{ bttt.ties }}
+        {{ btttService.ties }}
       </div>
     </div>
 

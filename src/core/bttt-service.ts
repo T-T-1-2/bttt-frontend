@@ -94,8 +94,9 @@ export class BtttService {
     this.winner = undefined;
   }
 
-  update(cell: BtttCell) {
-    if (this.isBlocked(cell)) {
+  update(x: number, y: number, player: PlayerSymbol) {
+    const cell = this.cells[y][x];
+    if (this.isBlocked(cell) || player != this.current) {
       return;
     }
 
