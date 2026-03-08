@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  webUrl: "localhost:4200",
-  socketUrl: "wss://localhost:7168/api/connect",
+  webUrl: "mc.hamsterdamm.amsterdam:443",
+  socketUrl: "wss://mc.hamsterdamm.amsterdam:5000/api/connect",
 };

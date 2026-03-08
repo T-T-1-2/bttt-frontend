@@ -6,7 +6,8 @@
     "start": "ng serve --configuration development --proxy-config proxy.config.json",
     "build": "ng build",
     "watch": "ng build --watch --configuration prod",
-    "test": "ng test"
+    "test": "ng test",
+    "deploy": "ng build --configuration production --base-href 'https://t-t-1-2.github.io/bttt-frontend/'"
   },
   "private": true,
   "dependencies": {
