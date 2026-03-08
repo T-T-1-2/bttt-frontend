@@ -1,0 +1,91 @@
+{
+  "title": "Boundless TTT",
+  "common": {
+    "close": "Schließen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "no": "Nein",
+    "yes": "Ja",
+    "apply": "Anwenden"
+  },
+  "landing": {
+    "title": "Stell dir vor...",
+    "text": "Tic Tac Toe, aber Spieler 2 bestimmt, wo der erste Zug von Spieler 1 tatsächlich im 3x3 Spielfeld landet. Das wars eigentlich schon.",
+    "start": "Los gehts!"
+  },
+  "preparation": {
+    "host": {
+      "button": "Veranstalten",
+      "share": "Teile diesen Spiele-Code oder Link mit deinem Gegner:",
+      "waiting": "Warte auf Gegner..."
+    },
+    "guest": {
+      "label": "Spiel-Code",
+      "placeholder": "z.B. ABCD",
+      "error": "4 Buchstaben",
+      "button": "Beitreten"
+    },
+    "error": {
+      "connection": {
+        "title": "Verbindungs Fehler!",
+        "description": "Verbindung zum Server konnte nicht aufgebaut weden. Versuche es später nochmal."
+      },
+      "overloaded": {
+        "title": "Ü B E R L A D E N",
+        "description": "Der Server scheint überlastet zu sein. Versuche es später nochmal."
+      },
+      "code": {
+        "title": "Ungültiger Game-Code",
+        "description": "Es wurde kein ausstehendes Spiel mit diesem Spiel-Code gefunden."
+      }
+    }
+  },
+  "match": {
+    "waiting": "Warte auf Gegner...",
+    "turn": "Spieler",
+    "labels": {
+      "win": "Du gewinnst!",
+      "loss": "Du verlierst...",
+      "tie": "Unentschieden..."
+    },
+    "buttons": {
+      "rematchAfterWin": "Rückkampf",
+      "rematchAfterLoss": "Revanche",
+      "rematchAfterTie": "Entscheidungsrunde",
+      "quitAfterWin": "Verlassen",
+      "quitAfterLoss": "Rage Quit",
+      "quitAfterTie": "Von mir aus"
+    },
+    "quit": {
+      "server": {
+        "title": "Dein Gegner verlor Verbindung!",
+        "description": "Dein Gegner hat die Verbindung zum Server verloren. Schätze mal das heißt du gewinnst?"
+      },
+      "client": {
+        "title": "Dein Gegner ist weg!",
+        "description": "Dein Gegner hat das Spiel verlassen. Zeit den Bohrer anzuwerfen (um löchernde Fragen zu stellen order so...)! >:D"
+      },
+      "error": {
+        "title": "Hoppla! ( ° ʖ °)",
+        "description": "Sieht so aus, als wäre was schief gelaufen. Versuche es später nochmal."
+      }
+    }
+  },
+  "settings": {
+    "header": "Einstellungen",
+    "theme": "Dunkel Modus",
+    "language": "Sprache",
+    "colors": "Farben",
+    "ownColor": "Deine Farbe",
+    "opponentColor": "Gegnerische Farbe",
+    "neutralColor": "Neutrale Farbe",
+    "symbols": "Symbole",
+    "symbolInfoLeft": "Du kannst (viele) der Symbole ",
+    "reference": "von hier",
+    "symbolInfoRight": "verwenden.",
+    "ownSymbol": "Dein Symbol",
+    "opponentSymbol": "Gegnerisches Symbol",
+    "dataInfo": "Speicherung von Daten",
+    "dataInfoText": "Die Einstellungen werden nur in deinem Browser gespeichert. Der Server verwaltet nur die Verbindung zu deinem Gegner solange das Spiel läuft und speichert überhaupt keine Daten."
+  }
+}
