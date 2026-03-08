@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "bttt-frontend": {
+    "bttt": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/bttt-frontend",
+            "outputPath": "dist/bttt",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -68,10 +68,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "bttt-frontend:build:production"
+              "buildTarget": "bttt:build:production"
             },
             "development": {
-              "buildTarget": "bttt-frontend:build:development"
+              "buildTarget": "bttt:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -79,7 +79,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "bttt-frontend:build"
+            "buildTarget": "bttt:build"
           }
         },
         "test": {
